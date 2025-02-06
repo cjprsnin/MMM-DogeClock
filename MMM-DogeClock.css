@@ -1,5 +1,27 @@
-.MMM-DogeClock iframe {
-  background: transparent;
-  transform: scale(1.1);
-   overflow: hidden !important; /* Hide scrollbars */
+.debt-ticker {
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.debt-container {
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+}
+
+.debt-label {
+  font-size: 0.8em;
+  color: #888;
+  margin-bottom: 5px;
+}
+
+.debt-amount {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #ff4444;
+}
+
+.error {
+  color: #ff0000;
+  font-size: 0.9em;
 }
