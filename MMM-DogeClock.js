@@ -13,3 +13,4 @@ getDom: function() {
   iframe.setAttribute("scrolling", "no"); // Disable scrollbars
   return iframe;
 }
+});
