@@ -1,51 +1,32 @@
-.tracker-container {
-    background-color: black;
+.us-debt-container {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 10px;
+    width: 100%;
+}
+
+.us-debt {
+    flex: 1;
+    background-color: rgba(5, 1, 1, 0);
     color: white;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 10px;
+    font: 400 16px Inconsolata, sans-serif;
     text-align: center;
-    padding: 15px;
-    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
 }
 
-.tracker-header {
-    font-size: 32px;
-    font-weight: bold;
-}
-
-.tracker-subtitle {
-    font-size: 18px;
-    margin-bottom: 15px;
-}
-
-.tracker-value {
-    font-size: 26px;
-    color: #00FF00;
-    font-weight: bold;
-}
-
-.tracker-label {
+.national-debt {
     font-size: 14px;
     color: gray;
 }
 
-.tracker-table {
-    width: 100%;
-    margin-top: 10px;
-    border-collapse: collapse;
-}
-
-.tracker-table td {
-    padding: 8px;
-    font-size: 18px;
-    border-bottom: 1px solid gray;
-}
-
-.tracker-table td:last-child {
-    text-align: right;
+.debt-amount {
+    font-size: 24px;
     font-weight: bold;
-}
-
-.green {
-    color: #00FF00;
 }
 
 /* Progress Bar */
@@ -68,4 +49,5 @@
     font-size: 14px;
     margin-top: 5px;
     color: gray;
+    text-align: center;
 }
