@@ -59,4 +59,5 @@ Module.register("MMM-DogeClock", {
     
     this.updateDom(this.config.animationSpeed);
   }
+  }
 });
