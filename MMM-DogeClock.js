@@ -44,6 +44,8 @@ Module.register("MMM-DogeClock", {
 
   socketNotificationReceived(notification, payload) {
     console.log(`[DebtTicker] Received notification: ${notification}`, payload);
+    if (notification === "DOM_OBJECTS_CREATED") {
+    setInterval(() => this.updateDom(), 5000); // Force refresh every 5s
     switch(notification) {
       case 'DEBT_UPDATE':
         this.data.baseDebt = payload;
