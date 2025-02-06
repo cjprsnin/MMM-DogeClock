@@ -17,6 +17,7 @@ Module.register("MMM-DogeClock", {
   },
 
   getDom() {
+    console.log("[DebtTicker] Rendering DOM"); // Add this
     const wrapper = document.createElement("div");
     wrapper.className = "debt-ticker";
     
@@ -42,6 +43,7 @@ Module.register("MMM-DogeClock", {
   },
 
   socketNotificationReceived(notification, payload) {
+    console.log(`[DebtTicker] Received notification: ${notification}`, payload);
     switch(notification) {
       case 'DEBT_UPDATE':
         this.data.baseDebt = payload;
