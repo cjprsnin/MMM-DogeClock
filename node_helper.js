@@ -1,4 +1,3 @@
-// node_helper.js
 const NodeHelper = require("node_helper");
 const axios = require("axios");
 
@@ -16,26 +15,35 @@ module.exports = NodeHelper.create({
   },
 
   startFetching() {
-    // Initial fetch
     this.fetchDebtData();
-    
-    // Set up interval
-    this.debtInterval = setInterval(() => {
-      this.fetchDebtData();
-    }, this.config.updateInterval);
+    this.debtInterval = setInterval(() => this.fetchDebtData(), this.config.updateInterval);
   },
 
   async fetchDebtData() {
     try {
-      console.log("[DebtTicker] Fetching debt data from:", this.config.debtApiUrl);
       const response = await axios.get(this.config.debtApiUrl);
-      console.log("[DebtTicker] API Response:", response.data);
-      const debtData = response.data.data[0].tot_pub_debt_out_amt;
-      const baseDebt = parseFloat(debtData.replace(/,/g, ''));
+      
+      // Validate response structure
+      if (!response.data?.data || !Array.isArray(response.data.data)) {
+        throw new Error('Invalid API response structure');
+      }
+
+      // Get most recent entry
+      const latestEntry = response.data.data.reduce((newest, current) => {
+        const currentDate = new Date(current.record_date);
+        return (!newest || currentDate > new Date(newest.record_date)) ? current : newest;
+      }, null);
+
+      if (!latestEntry?.tot_pub_debt_out_amt) {
+        throw new Error('No valid debt amount found in response');
+      }
+
+      const baseDebt = parseFloat(latestEntry.tot_pub_debt_out_amt.replace(/,/g, ''));
       this.sendSocketNotification('DEBT_UPDATE', baseDebt);
+
     } catch (error) {
-      console.error("[DebtTicker] Full error:", error.config); // Log full error
-      this.sendSocketNotification('ERROR', 'Failed to load debt data');
+      console.error('[DebtTicker] Fetch error:', error.message);
+      this.sendSocketNotification('ERROR', `API Error: ${error.message}`);
     }
   }
 });
