@@ -1,6 +1,8 @@
 .debt-ticker {
   font-family: Arial, sans-serif;
   text-align: center;
+   display: block !important; /* Force display */
+  z-index: 9999; /* Ensure it's on top */
 }
 
 .debt-container {
@@ -16,7 +18,8 @@
 }
 
 .debt-amount {
-  font-size: 1.5em;
+  font-size: 20px !important;
+  color: #FF0000 !important; /* Use bright color for testing */
   font-weight: bold;
   color: #ff4444;
 }
