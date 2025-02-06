@@ -34,6 +34,10 @@ Module.register("MMM-DogeClock", {
       self.getDogeClockData();
     }, this.config.updateInterval);
   },
+  
+  getStyles: function () {
+  return ["MMM-DogeClock.css"];
+},
 
   getDom: function () {
     var wrapper = document.createElement("div");
