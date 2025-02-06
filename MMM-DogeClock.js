@@ -25,7 +25,7 @@ Module.register("MMM-DogeClock", {
             // Simulated additional data (replace with real API calls if available)
             const savings = 2290000000; // Example: $2.29B
             const savingsPerTaxpayer = 15.24;
-            const progressToGoal = 0.1;
+            const progressToGoal = 0.001; // 0.1% progress to $2T
             const totalInitiatives = 43;
             const countdownDays = this.calculateDaysUntil(this.config.targetDate);
             
@@ -36,7 +36,7 @@ Module.register("MMM-DogeClock", {
                 debt: 34200000000000,
                 savings: 2290000000,
                 savingsPerTaxpayer: 15.24,
-                progressToGoal: 0.1,
+                progressToGoal: 0.001,
                 totalInitiatives: 43,
                 countdownDays: this.calculateDaysUntil(this.config.targetDate)
             };
@@ -55,6 +55,8 @@ Module.register("MMM-DogeClock", {
         const wrapper = document.getElementById("debt-container");
         if (!wrapper) return;
 
+        const progressPercent = (progressToGoal * 100).toFixed(2);
+
         wrapper.innerHTML = `
             <div class="tracker-container">
                 <div class="tracker-header">${countdownDays} Days</div>
@@ -63,19 +65,29 @@ Module.register("MMM-DogeClock", {
                 <div class="tracker-value">$${(savings / 1_000_000_000).toFixed(2)}B</div>
                 <div class="tracker-label">Taxpayer Dollars Saved*</div>
 
-                <div class="tracker-box">
-                    <div class="tracker-stat">$${(savings / 1_000_000_000).toFixed(2)}B</div>
-                    <div class="tracker-label">Total Savings</div>
+                <table class="tracker-table">
+                    <tr>
+                        <td>Total Savings</td>
+                        <td class="green">$${(savings / 1_000_000_000).toFixed(2)}B</td>
+                    </tr>
+                    <tr>
+                        <td>Savings per Taxpayer</td>
+                        <td class="green">$${savingsPerTaxpayer.toFixed(2)}</td>
+                    </tr>
+                    <tr>
+                        <td>Progress to Goal</td>
+                        <td>${progressPercent}%</td>
+                    </tr>
+                    <tr>
+                        <td>Total Initiatives</td>
+                        <td class="green">${totalInitiatives}</td>
+                    </tr>
+                </table>
 
-                    <div class="tracker-stat green">$${savingsPerTaxpayer.toFixed(2)}</div>
-                    <div class="tracker-label">Savings per Taxpayer</div>
-
-                    <div class="tracker-stat">${(progressToGoal * 100).toFixed(1)}%</div>
-                    <div class="tracker-label">Progress to Goal</div>
-
-                    <div class="tracker-stat green">${totalInitiatives}</div>
-                    <div class="tracker-label">Total Initiatives</div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" style="width: ${progressPercent}%;"></div>
                 </div>
+                <div class="progress-label">$0 → $1T → $2T</div>
             </div>
         `;
     },
