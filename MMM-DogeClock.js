@@ -1,6 +1,7 @@
 Module.register("MMM-DogeClock", {
     defaults: {
         updateInterval: 60000,  // Update every minute
+        targetDate: "2026-07-04" // Goal date for countdown
     },
 
     start: function() {
@@ -21,31 +22,67 @@ Module.register("MMM-DogeClock", {
             const data = await response.json();
             const debt = parseFloat(data.data[0].tot_pub_debt_out_amt);
             
-            // Update the debt display
-            this.updateDebtDisplay(debt);
+            // Simulated additional data (replace with real API calls if available)
+            const savings = 2290000000; // Example: $2.29B
+            const savingsPerTaxpayer = 15.24;
+            const progressToGoal = 0.1;
+            const totalInitiatives = 43;
+            const countdownDays = this.calculateDaysUntil(this.config.targetDate);
+            
+            this.updateDebtDisplay({ debt, savings, savingsPerTaxpayer, progressToGoal, totalInitiatives, countdownDays });
         } catch (error) {
             console.error('Error fetching debt data:', error);
-            const fallbackDebt = 34200000000000;
-            this.updateDebtDisplay(fallbackDebt);
+            const fallbackData = {
+                debt: 34200000000000,
+                savings: 2290000000,
+                savingsPerTaxpayer: 15.24,
+                progressToGoal: 0.1,
+                totalInitiatives: 43,
+                countdownDays: this.calculateDaysUntil(this.config.targetDate)
+            };
+            this.updateDebtDisplay(fallbackData);
         }
     },
 
-    updateDebtDisplay: function(debt) {
-        const formattedDebt = `$${Math.floor(debt).toLocaleString()}`;
-        
-        // Example of how you might update a specific element on your MagicMirror
-        const debtElement = document.getElementById('debt-display');
-        if (debtElement) {
-            debtElement.textContent = formattedDebt;
-        }
+    calculateDaysUntil: function(targetDate) {
+        const today = new Date();
+        const target = new Date(targetDate);
+        const diffTime = target - today;
+        return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    },
+
+    updateDebtDisplay: function({ debt, savings, savingsPerTaxpayer, progressToGoal, totalInitiatives, countdownDays }) {
+        const wrapper = document.getElementById("debt-container");
+        if (!wrapper) return;
+
+        wrapper.innerHTML = `
+            <div class="tracker-container">
+                <div class="tracker-header">${countdownDays} Days</div>
+                <div class="tracker-subtitle">until July 4th, 2026</div>
+
+                <div class="tracker-value">$${(savings / 1_000_000_000).toFixed(2)}B</div>
+                <div class="tracker-label">Taxpayer Dollars Saved*</div>
+
+                <div class="tracker-box">
+                    <div class="tracker-stat">$${(savings / 1_000_000_000).toFixed(2)}B</div>
+                    <div class="tracker-label">Total Savings</div>
+
+                    <div class="tracker-stat green">$${savingsPerTaxpayer.toFixed(2)}</div>
+                    <div class="tracker-label">Savings per Taxpayer</div>
+
+                    <div class="tracker-stat">${(progressToGoal * 100).toFixed(1)}%</div>
+                    <div class="tracker-label">Progress to Goal</div>
+
+                    <div class="tracker-stat green">${totalInitiatives}</div>
+                    <div class="tracker-label">Total Initiatives</div>
+                </div>
+            </div>
+        `;
     },
 
     getDom: function() {
         const wrapper = document.createElement("div");
-        const debtElement = document.createElement("div");
-        debtElement.id = "debt-display";
-        debtElement.classList.add("debt-display");
-        wrapper.appendChild(debtElement);
+        wrapper.id = "debt-container";
         return wrapper;
     }
 });
