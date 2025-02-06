@@ -1,36 +1,48 @@
-.MMM-DogeClock {
-  text-align: center;
-  color: white;
+.tracker-container {
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    border-radius: 8px;
 }
 
-.MMM-DogeClock h1 {
-  font-size: 2em;
+.tracker-header {
+    font-size: 32px;
+    font-weight: bold;
 }
 
-.MMM-DogeClock h2 {
-  font-size: 1.8em;
-  color: #0f0;
+.tracker-subtitle {
+    font-size: 18px;
+    margin-bottom: 15px;
 }
 
-.MMM-DogeClock p {
-  margin: 5px 0;
+.tracker-value {
+    font-size: 26px;
+    color: #00FF00;
+    font-weight: bold;
 }
 
-.MMM-DogeClock .container {
-  background: #222;
-  padding: 10px;
-  border-radius: 10px;
+.tracker-label {
+    font-size: 14px;
+    color: gray;
 }
 
-.MMM-DogeClock .progress-bar {
-  width: 100%;
-  background: #444;
-  height: 10px;
-  border-radius: 5px;
-  overflow: hidden;
+.tracker-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
 }
 
-.MMM-DogeClock .progress {
-  background: #0f0;
-  height: 100%;
+.tracker-stat {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+}
+
+.green {
+    color: #00FF00;
 }
