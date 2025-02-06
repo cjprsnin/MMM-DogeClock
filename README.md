@@ -4,9 +4,9 @@ javascript
 Copy
 {
   module: "MMM-DogeClock",
-  position: "middle_center",
+  position: "bottom_bar",
   config: {
-    width: "800px", // Adjust based on screen size
-    height: "200px"
+    debtIncreasePerSecond: 1.5, // Adjust debt growth rate
+    updateInterval: 300000 // 5 minutes
   }
 }
