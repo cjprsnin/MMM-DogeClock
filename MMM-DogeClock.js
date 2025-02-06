@@ -1,4 +1,4 @@
-Module.register("MMM-DebtTicker", {
+Module.register("MMM-DogeClock", {
   defaults: {
     debtApiUrl: "https://cryptic-waters-29117-09da23841b14.herokuapp.com/api/services/api/fiscal_service/v2/accounting/od/debt_to_penny",
     updateInterval: 60000,
