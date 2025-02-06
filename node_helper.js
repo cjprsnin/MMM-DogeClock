@@ -1,49 +1,28 @@
-const NodeHelper = require("node_helper");
-const axios = require("axios");
+var NodeHelper = require("node_helper");
+const fetch = require("node-fetch");
 
 module.exports = NodeHelper.create({
-  start() {
-    this.config = null;
-    this.debtInterval = null;
+  start: function () {
+    console.log("MMM-DogeClock helper started...");
   },
 
-  socketNotificationReceived(notification, payload) {
-    if (notification === 'INIT') {
-      this.config = payload;
-      this.startFetching();
+  socketNotificationReceived: function (notification, payload) {
+    if (notification === "GET_DOGE_DATA") {
+      this.fetchDogeData();
     }
   },
 
-  startFetching() {
-    this.fetchDebtData();
-    this.debtInterval = setInterval(() => this.fetchDebtData(), this.config.updateInterval);
-  },
+  fetchDogeData: function () {
+    var self = this;
+    var url = "https://dogegov.com/dogeclock";
 
-  async fetchDebtData() {
-    try {
-      const response = await axios.get(this.config.debtApiUrl);
-      
-      // Validate response structure
-      if (!response.data?.data || !Array.isArray(response.data.data)) {
-        throw new Error('Invalid API response structure');
-      }
-
-      // Get most recent entry
-      const latestEntry = response.data.data.reduce((newest, current) => {
-        const currentDate = new Date(current.record_date);
-        return (!newest || currentDate > new Date(newest.record_date)) ? current : newest;
-      }, null);
-
-      if (!latestEntry?.tot_pub_debt_out_amt) {
-        throw new Error('No valid debt amount found in response');
-      }
-
-      const baseDebt = parseFloat(latestEntry.tot_pub_debt_out_amt.replace(/,/g, ''));
-      this.sendSocketNotification('DEBT_UPDATE', baseDebt);
-
-    } catch (error) {
-      console.error('[DebtTicker] Fetch error:', error.message);
-      this.sendSocketNotification('ERROR', `API Error: ${error.message}`);
-    }
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        self.sendSocketNotification("DOGE_DATA", data);
+      })
+      .catch((error) => {
+        console.error("MMM-DogeClock: Error fetching data", error);
+      });
   }
 });
