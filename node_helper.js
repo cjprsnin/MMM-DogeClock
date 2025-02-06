@@ -1,5 +1,4 @@
 var NodeHelper = require("node_helper");
-const fetch = require("node-fetch");
 
 module.exports = NodeHelper.create({
   start: function () {
@@ -12,17 +11,13 @@ module.exports = NodeHelper.create({
     }
   },
 
-  fetchDogeData: function () {
-    var self = this;
-    var url = "https://dogegov.com/dogeclock";
-
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        self.sendSocketNotification("DOGE_DATA", data);
-      })
-      .catch((error) => {
-        console.error("MMM-DogeClock: Error fetching data", error);
-      });
+  fetchDogeData: async function () {
+    try {
+      const response = await fetch("https://dogegov.com/dogeclock");
+      const data = await response.json();
+      this.sendSocketNotification("DOGE_DATA", data);
+    } catch (error) {
+      console.error("MMM-DogeClock: Error fetching data", error);
+    }
   }
 });
