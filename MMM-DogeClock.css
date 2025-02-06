@@ -1,24 +1,36 @@
-.debt-ticker {
-  min-width: 300px;
-  padding: 15px;
-  background: rgba(0, 0, 0, 0.7);
-  border-radius: 8px;
+.MMM-DogeClock {
+  text-align: center;
+  color: white;
 }
 
-.loading {
-  color: #888;
-  font-style: italic;
+.MMM-DogeClock h1 {
+  font-size: 2em;
 }
 
-.debt-trend {
-  font-size: 0.8em;
-  margin-top: 5px;
+.MMM-DogeClock h2 {
+  font-size: 1.8em;
+  color: #0f0;
 }
 
-.debt-trend.rising {
-  color: #00ff00;
+.MMM-DogeClock p {
+  margin: 5px 0;
 }
 
-.debt-trend.falling {
-  color: #ff0000;
+.MMM-DogeClock .container {
+  background: #222;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.MMM-DogeClock .progress-bar {
+  width: 100%;
+  background: #444;
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.MMM-DogeClock .progress {
+  background: #0f0;
+  height: 100%;
 }
