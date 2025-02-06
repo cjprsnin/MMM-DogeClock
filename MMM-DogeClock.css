@@ -27,22 +27,45 @@
     color: gray;
 }
 
-.tracker-box {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+.tracker-table {
+    width: 100%;
     margin-top: 10px;
-    padding: 10px;
-    border: 1px solid gray;
-    border-radius: 5px;
+    border-collapse: collapse;
 }
 
-.tracker-stat {
-    font-size: 20px;
+.tracker-table td {
+    padding: 8px;
+    font-size: 18px;
+    border-bottom: 1px solid gray;
+}
+
+.tracker-table td:last-child {
+    text-align: right;
     font-weight: bold;
-    color: white;
 }
 
 .green {
     color: #00FF00;
+}
+
+/* Progress Bar */
+.progress-bar-container {
+    width: 100%;
+    height: 12px;
+    background-color: #333;
+    border-radius: 6px;
+    margin-top: 10px;
+    position: relative;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #00FF00;
+    border-radius: 6px;
+}
+
+.progress-label {
+    font-size: 14px;
+    margin-top: 5px;
+    color: gray;
 }
