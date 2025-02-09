@@ -7,14 +7,13 @@ module.exports = NodeHelper.create({
 
   socketNotificationReceived: function (notification, payload) {
     if (notification === "GET_DOGE_DATA") {
-      // Optionally pass targetDate in payload, else use default
       this.fetchDebtData(payload);
     }
   },
 
   fetchDebtData: async function (payload) {
     try {
-      // Fetch national debt data
+      // Fetch national debt data from the Treasury API
       const debtResponse = await fetch(
         'https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v2/accounting/od/debt_to_penny?sort=-record_date&limit=1'
       );
@@ -22,12 +21,17 @@ module.exports = NodeHelper.create({
       const debtData = await debtResponse.json();
       const debt = parseFloat(debtData.data[0].tot_pub_debt_out_amt);
 
-      // Fetch additional data concurrently
-      const [savingsResponse, savingsPerTaxpayerResponse, totalInitiativesResponse] = await Promise.all([
+      // Fetch additional data concurrently from their respective APIs
+      const [
+        savingsResponse,
+        savingsPerTaxpayerResponse,
+        totalInitiativesResponse
+      ] = await Promise.all([
         fetch('https://api.example.com/savings'),
         fetch('https://api.example.com/savings_per_taxpayer'),
         fetch('https://api.example.com/total_initiatives')
       ]);
+
       if (
         !savingsResponse.ok ||
         !savingsPerTaxpayerResponse.ok ||
@@ -35,21 +39,21 @@ module.exports = NodeHelper.create({
       ) {
         throw new Error('One or more additional API responses not ok');
       }
+
       const savingsData = await savingsResponse.json();
-      const savings = parseFloat(savingsData.value); // adjust field name as needed
+      const savings = parseFloat(savingsData.value); // Replace "value" with the actual field name
 
       const savingsPerTaxpayerData = await savingsPerTaxpayerResponse.json();
-      const savingsPerTaxpayer = parseFloat(savingsPerTaxpayerData.value); // adjust accordingly
+      const savingsPerTaxpayer = parseFloat(savingsPerTaxpayerData.value); // Adjust as needed
 
       const totalInitiativesData = await totalInitiativesResponse.json();
-      const totalInitiatives = parseInt(totalInitiativesData.value, 10); // adjust accordingly
+      const totalInitiatives = parseInt(totalInitiativesData.value, 10); // Adjust as needed
 
-      // Compute progress and countdownDays (use payload.targetDate if provided)
-      const targetDate = payload && payload.targetDate ? payload.targetDate : "2026-07-04";
-      const countdownDays = this.calculateDaysUntil(targetDate);
+      // Calculate progress toward a $2T goal and days until the target date.
       const progressToGoal = (savings / 2000000000000) * 100;
+      const countdownDays = this.calculateDaysUntil(payload.targetDate || "2026-07-04");
 
-      // Send the combined data to the module
+      // Send the combined data to the module.
       this.sendSocketNotification("DOGE_DATA", {
         debt,
         savings,
