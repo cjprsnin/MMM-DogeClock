@@ -52,9 +52,35 @@ Module.register("MMM-DogeClock", {
     `;
   },
 
-  getDom: function() {
-    const wrapper = document.createElement("div");
-    wrapper.id = "us-debt-container";
+getDom: function () {
+  var wrapper = document.createElement("div");
+  wrapper.className = "MMM-DogeClock";
+
+  if (!this.dogeData) {
+    wrapper.innerHTML = "Loading DogeClock...";
     return wrapper;
   }
+
+  wrapper.innerHTML = `
+    <h1>${this.dogeData.diffDays} Days</h1>
+    <p>until July 4th, 2026</p>
+    <h2>$${(this.dogeData.totalSavings / 1e9).toFixed(2)}B</h2>
+    <p>Taxpayer Dollars Saved*</p>
+    <div class="container">
+      <p class="highlight">$${(this.dogeData.totalSavings / 1e9).toFixed(2)}B</p>
+      <p>Total Savings</p>
+      <p class="highlight">${this.dogeData.progressPercentage}%</p>
+      <p>Progress to Goal</p>
+      <p class="highlight">$${this.dogeData.savingsPerTaxpayer.toFixed(2)}</p>
+      <p>Savings per Taxpayer</p>
+      <p class="highlight">${this.dogeData.totalInitiatives}</p>
+      <p>Total Initiatives</p>
+      <div class="progress-bar">
+        <div class="progress" style="width: ${this.dogeData.progressPercentage}%;"></div>
+      </div>
+    </div>
+  `;
+  return wrapper;
+}
+
 });
