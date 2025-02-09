@@ -19,25 +19,62 @@ Module.register("MMM-DogeClock", {
     }, this.config.updateInterval);
   },
 
-  fetchDebtData: async function() {
-    try {
-      const response = await fetch('https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v2/accounting/od/debt_to_penny?sort=-record_date&limit=1');
-      if (!response.ok) throw new Error('Network response not ok');
-      const data = await response.json();
-      const debt = parseFloat(data.data[0].tot_pub_debt_out_amt);
-      
-      // Example additional data (replace with real API calls if available)
-      const savings = 2290000000; 
-      const savingsPerTaxpayer = 15.24;
-      const progressToGoal = (savings / 2000000000000) * 100; // Percentage toward $2T
-      const totalInitiatives = 43;
-      const countdownDays = this.calculateDaysUntil(this.config.targetDate);
-      
-      this.updateDebtDisplay({ debt, savings, savingsPerTaxpayer, progressToGoal, totalInitiatives, countdownDays });
-    } catch (error) {
-      console.error('Error fetching debt data:', error);
+  ffetchDebtData: async function() {
+  try {
+    // Fetch national debt data from the Treasury API
+    const response = await fetch(
+      'https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v2/accounting/od/debt_to_penny?sort=-record_date&limit=1'
+    );
+    if (!response.ok) throw new Error('Network response not ok');
+    const data = await response.json();
+    const debt = parseFloat(data.data[0].tot_pub_debt_out_amt);
+
+    // Fetch additional data concurrently from their respective APIs
+    const [
+      savingsResponse,
+      savingsPerTaxpayerResponse,
+      totalInitiativesResponse
+    ] = await Promise.all([
+      fetch('https://api.example.com/savings'),
+      fetch('https://api.example.com/savings_per_taxpayer'),
+      fetch('https://api.example.com/total_initiatives')
+    ]);
+
+    if (
+      !savingsResponse.ok ||
+      !savingsPerTaxpayerResponse.ok ||
+      !totalInitiativesResponse.ok
+    ) {
+      throw new Error('One or more additional API responses not ok');
     }
-  },
+
+    const savingsData = await savingsResponse.json();
+    const savings = parseFloat(savingsData.value); // Replace "value" with actual field name
+
+    const savingsPerTaxpayerData = await savingsPerTaxpayerResponse.json();
+    const savingsPerTaxpayer = parseFloat(savingsPerTaxpayerData.value); // Replace "value" as needed
+
+    const totalInitiativesData = await totalInitiativesResponse.json();
+    const totalInitiatives = parseInt(totalInitiativesData.value, 10); // Replace "value" accordingly
+
+    // Calculate progress toward a $2T goal and days until the target date
+    const progressToGoal = (savings / 2000000000000) * 100;
+    const countdownDays = this.calculateDaysUntil(this.config.targetDate);
+
+    // Update the display using all fetched data
+    this.updateDebtDisplay({
+      debt,
+      savings,
+      savingsPerTaxpayer,
+      progressToGoal,
+      totalInitiatives,
+      countdownDays
+    });
+  } catch (error) {
+    console.error('Error fetching debt data:', error);
+  }
+}
+
 
   calculateDaysUntil: function(targetDate) {
     const today = new Date();
