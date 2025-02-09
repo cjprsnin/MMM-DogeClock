@@ -73,7 +73,7 @@ Module.register("MMM-DogeClock", {
   } catch (error) {
     console.error('Error fetching debt data:', error);
   }
-}
+},
 
 
   calculateDaysUntil: function(targetDate) {
