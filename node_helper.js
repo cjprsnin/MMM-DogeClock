@@ -3,17 +3,18 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 
 module.exports = NodeHelper.create({
-  start: function () {
+  start: function() {
     console.log("Starting node_helper for MMM-DogeClock");
   },
 
-  socketNotificationReceived: function (notification, payload) {
+  socketNotificationReceived: function(notification, payload) {
     if (notification === "GET_DOGE_DATA") {
+      console.log("Received GET_DOGE_DATA notification with payload:", payload);
       this.fetchDogeData(payload.targetDate);
     }
   },
 
-  fetchDogeData: async function (targetDate) {
+  fetchDogeData: async function(targetDate) {
     try {
       const response = await axios.get("https://www.doge-tracker.com/embed");
       const $ = cheerio.load(response.data);
@@ -32,7 +33,7 @@ module.exports = NodeHelper.create({
       // Calculate days until target date
       const currentDate = new Date();
       const target = new Date(targetDate);
-      const diffTime = Math.abs(target - currentDate);
+      const diffTime = target - currentDate;
       const countdownDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
       const dogeData = {
@@ -43,6 +44,7 @@ module.exports = NodeHelper.create({
         countdownDays,
       };
 
+      console.log("Fetched DOGE data:", dogeData);
       this.sendSocketNotification("DOGE_DATA", dogeData);
     } catch (error) {
       console.error("Error fetching DOGE data:", error);
