@@ -62,6 +62,6 @@ module.exports = NodeHelper.create({
   } catch (error) {
     console.error("Error fetching DOGE data:", error);
   }
-}.
+},
 
 });
